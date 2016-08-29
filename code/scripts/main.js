@@ -5,6 +5,7 @@
 import * as ReactDOM from 'react-dom';
 import * as React from 'react';
 import { Router, Route, browserHistory } from 'react-router';
+import helpers from './helpers';
 
 /* 
   App
@@ -80,9 +81,9 @@ const StorePicker = React.createClass({
     return (
       <form className="store-selector">
         {/* this how you comment */}
-        <h2> Please enter a store</h2>
-        <input type="text" ref="storeId"/>
-        <input type="Submit"/> 
+        <h2>Please Enter A Store</h2>
+        <input type="text" ref="storeId" defaultValue={helpers.getFunName()} required />
+        <input type="Submit" />
       </form>
     );
   }
