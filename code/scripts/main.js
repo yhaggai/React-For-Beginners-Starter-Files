@@ -4,9 +4,8 @@
 
 import * as ReactDOM from 'react-dom';
 import * as React from 'react';
-import { Router, Route, browserHistory } from 'react-router';
+import { Router, Route, browserHistory, History } from 'react-router';
 import helpers from './helpers';
-
 /* 
   App
 */
@@ -73,13 +72,28 @@ const Inventory = React.createClass({
 
 
 const StorePicker = React.createClass({
+  mixins: [History],
+  goToStore: function() {
+    event.preventDefault();
+    // get the input
+    // navigate to the new url
+    // this is what we used to do
+    // var storeId = $('input').val();
+    // 'refs' is used on the input field - storeId
+    const storeId = this.refs.storeId.value;
+    // this is what we used to do
+    // window.location.hash = ....
+    // this will cause an error (without mixin)
+    this.history.pushState(null, `/store/${storeId}`)
+    
+  },
   render: function() {
     // alternative way
     // return React.createElement('p', {className: 'testing'}, 'content');
     // alway return a single element (unlike jade)
     // you can't use class
     return (
-      <form className="store-selector">
+      <form className="store-selector" onSubmit={this.goToStore}>
         {/* this how you comment */}
         <h2>Please Enter A Store</h2>
         <input type="text" ref="storeId" defaultValue={helpers.getFunName()} required />
