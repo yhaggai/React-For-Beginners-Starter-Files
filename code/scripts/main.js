@@ -6,6 +6,7 @@ import * as ReactDOM from 'react-dom';
 import * as React from 'react';
 import { Router, Route, browserHistory, History } from 'react-router';
 import helpers from './helpers';
+import sampleFishes from './sample-fishes.js'
 
 /* 
   App
@@ -23,6 +24,11 @@ const App = React.createClass({
     // set the state
     this.setState({ fishes: this.state.fishes });
   },
+  loadSamples: function() {
+    this.setState({
+      fishes: sampleFishes
+    })
+  },
   render: function(){
     return (
       <div className='catch-of-the-day'>
@@ -30,7 +36,7 @@ const App = React.createClass({
           <Header tagline="Fresh Seafood Market" />
         </div>
         <Order />
-        <Inventory addFish={this.addFish}/>
+        <Inventory addFish={this.addFish} loadSamples={this.loadSamples}/>
       </div>
       );
   }
@@ -120,6 +126,7 @@ const Inventory = React.createClass({
         <p>Inventory</p>
         {/* this is how we propgate}*/}
         <AddFishForm {...this.props} />
+        <button onClick={this.props.loadSamples}> Load Sample Fishes</button>
       </div>
     )
   }
