@@ -29,11 +29,17 @@ const App = React.createClass({
       fishes: sampleFishes
     })
   },
-  render: function(){
+  renderFish: function(key){
+    return <Fish key={key} index={key} details={this.state.fishes[key]}/>
+  },
+  render: function() {
     return (
       <div className='catch-of-the-day'>
         <div className='menu'>
           <Header tagline="Fresh Seafood Market" />
+          <ul className="list-of-fishes">
+            {Object.keys(this.state.fishes).map(this.renderFish)}
+          </ul> 
         </div>
         <Order />
         <Inventory addFish={this.addFish} loadSamples={this.loadSamples}/>
@@ -42,6 +48,25 @@ const App = React.createClass({
   }
 });
 
+/*
+  Fish
+ */
+const Fish = React.createClass({
+  render: function() {
+    // TODO add props validation
+    const { name, image, price, desc } = this.props.details;
+    return (
+      <li className="menu-fish">
+        <img src={image} alt={name} />
+        <h3 className="fish-name"> 
+          {name}
+          <span className="price">{helpers.formatPrice(price)}</span>
+        </h3>
+        <p>{desc}</p>
+      </li>
+    )
+  }
+})
 /*
   Add fish form
  */
