@@ -6,23 +6,74 @@ import * as ReactDOM from 'react-dom';
 import * as React from 'react';
 import { Router, Route, browserHistory, History } from 'react-router';
 import helpers from './helpers';
+
 /* 
   App
 */
 const App = React.createClass({
+  getInitialState: function() {
+    return {
+      fishes: {},
+      order: {}
+    };
+  },
+  addFish: function(fish) {
+    const timestamp = (new Date().getTime());
+    this.state.fishes[`fish-${timestamp}`] = fish;
+    // set the state
+    this.setState({ fishes: this.state.fishes });
+  },
   render: function(){
     return (
       <div className='catch-of-the-day'>
         <div className='menu'>
           <Header tagline="Fresh Seafood Market" />
         </div>
-        <Order/>
-        <Inventory/>
+        <Order />
+        <Inventory addFish={this.addFish}/>
       </div>
-      )
+      );
   }
-})
+});
 
+/*
+  Add fish form
+ */
+
+const AddFishForm = React.createClass({
+  createFish: function (event) {
+    event.preventDefault();
+    // take the data from the form
+    const fish = {
+      name: this.refs.name.value,
+      price: this.refs.price.value,
+      status: this.refs.status.value,
+      desc: this.refs.desc.value,
+      image: this.refs.image.value
+    }
+    // Add the fish to App state
+    //  this what we expect
+    // App.addFish(fish)
+    // but we need propagate it through inventory -> app
+    this.props.addFish(fish);
+    
+  },
+  render : function() {
+    return (
+      <form className="fish-edit" ref="fishForm" onSubmit={this.createFish}>
+        <input type="text" ref="name" placeholder="Fish Name"/>
+        <input type="text" ref="price" placeholder="Fish Price" />
+        <select ref="status">
+          <option value="available">Fresh!</option>
+          <option value="unavailable">Sold Out!</option>
+        </select>
+        <textarea type="text" ref="desc" placeholder="Desc"></textarea>
+        <input type="text" ref="image" placeholder="URL to Image" />
+        <button type="submit">+ Add Item </button>
+      </form>
+    )
+  }
+});
 
 /*
   Header  
@@ -65,7 +116,11 @@ const Order = React.createClass({
 const Inventory = React.createClass({
   render: function() {
     return (
-      <p>Inventory</p>
+      <div>
+        <p>Inventory</p>
+        {/* this is how we propgate}*/}
+        <AddFishForm {...this.props} />
+      </div>
     )
   }
 })
