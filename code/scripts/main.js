@@ -6,7 +6,11 @@ import * as ReactDOM from 'react-dom';
 import * as React from 'react';
 import { Router, Route, browserHistory, History } from 'react-router';
 import helpers from './helpers';
-import sampleFishes from './sample-fishes.js'
+import sampleFishes from './sample-fishes.js';
+import * as Rebase from 're-base';
+
+const base = Rebase.createClass('https://react-testing123.firebaseio.com/');
+
 
 /* 
   App
@@ -17,6 +21,12 @@ const App = React.createClass({
       fishes: {},
       order: {}
     };
+  },
+  componentDidMount: function() {
+    base.syncState(`${this.props.params.storeId}/fishes`, {
+      context: this,
+      state: 'fishes'
+    });
   },
   addToOrder: function(key) {
     this.state.order[key] = this.state.order[key] + 1 || 1;
