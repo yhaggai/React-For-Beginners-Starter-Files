@@ -65,7 +65,8 @@ const App = React.createClass({
           </ul> 
         </div>
         <Order fishes={this.state.fishes} order={this.state.order}/>
-        <Inventory addFish={this.addFish} loadSamples={this.loadSamples}/>
+        <Inventory addFish={this.addFish} loadSamples={this.loadSamples} 
+        fishes={this.state.fishes}/>
       </div>
       );
   }
@@ -83,7 +84,7 @@ const Fish = React.createClass({
     // TODO add props validation
     const { name, image, price, desc, status } = this.props.details;
     const isAvailable = status === 'available' ? true : false;
-    const buttonText = isAvailable ? 'Add to Order' : 'Sold Out!'
+    const buttonText = isAvailable ? 'Add to Order' : 'Sold Out!';
     return (
       <li className="menu-fish">
         <img src={image} alt={name} />
@@ -184,7 +185,7 @@ const Order = React.createClass({
       const count = this.props.order[key];
       const isAvailable = fish && fish.status === 'available';
       if (fish && isAvailable) {
-        return prevTotal + (count * parseInt(fish.price) || 0);
+        return prevTotal + (count * parseInt(fish.price, 10) || 0);
       }
       return prevTotal;
     }, 0);
@@ -208,10 +209,27 @@ const Order = React.createClass({
 */
 
 const Inventory = React.createClass({
+  renderInventory: function(key) {
+    return (
+      <div className="fish-edit" key={key}>
+        <input type="text" value={this.props.fishes[key].name}/>
+        <input type="text" ref="price" value={this.props.fishes[key].price}/>
+        <select value={this.props.fishes[key].status}>
+          <option value="available">Fresh!</option>
+          <option value="unavailable">Sold Out!</option>
+        </select>
+        <textarea type="text" value={this.props.fishes[key].desc}></textarea>
+        <input type="text" ref="image" value={this.props.fishes[key].image} />
+      </div>
+    );
+  },
   render: function() {
     return (
       <div>
-        <p>Inventory</p>
+
+        <h2>Inventory</h2>
+        {/*Object.keys(this.props.fishes).map(this.renderInventory)*/}
+        {Object.keys(this.props.fishes).map(this.renderInventory)}
         {/* this is how we propgate}*/}
         <AddFishForm {...this.props} />
         <button onClick={this.props.loadSamples}> Load Sample Fishes</button>
