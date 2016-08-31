@@ -167,6 +167,9 @@ const Header = React.createClass({
         {/*<h3 className="tagline">Fill me in</h3>*/}
       </header>
     )
+  },
+  propTypes: {
+    tagline: React.PropTypes.string.isRequired
   }
 })
 
@@ -223,6 +226,11 @@ const Order = React.createClass({
         </CSSTranstionGroup>
       </div>
     );
+  },
+  propTypes : {
+    fishes : React.PropTypes.object.isRequired,
+    order : React.PropTypes.object.isRequired,
+    removeFromOrder : React.PropTypes.func.isRequired
   }
 });
 
@@ -253,11 +261,18 @@ const Inventory = React.createClass({
         <h2>Inventory</h2>
         {/*Object.keys(this.props.fishes).map(this.renderInventory)*/}
         {Object.keys(this.props.fishes).map(this.renderInventory)}
-        {/* this is how we propgate}*/}
+        {/* this is how we propagate */}
         <AddFishForm {...this.props} />
         <button onClick={this.props.loadSamples}> Load Sample Fishes</button>
       </div>
     )
+  },
+  propTypes : {
+    addFish : React.PropTypes.func.isRequired,
+    loadSamples : React.PropTypes.func.isRequired,
+    fishes : React.PropTypes.object.isRequired,
+    linkState : React.PropTypes.func.isRequired,
+    removeFish : React.PropTypes.func.isRequired
   }
 })
 
