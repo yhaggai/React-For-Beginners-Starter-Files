@@ -8,6 +8,7 @@ import { Router, Route, browserHistory, History } from 'react-router';
 import helpers from './helpers';
 import sampleFishes from './sample-fishes.js';
 import * as Rebase from 're-base';
+import CSSTranstionGroup from 'react-addons-css-transition-group';
 
 const base = Rebase.createClass('https://react-testing123.firebaseio.com/');
 
@@ -184,7 +185,9 @@ const Order = React.createClass({
     }
     return (
       <li key={key}>
-        <span>{count}lbs</span>
+        <CSSTranstionGroup transitionName="count" transitionEnterTimeout={250} transitionLeaveTimeout={250}>
+          <span key={count}>{count}lbs</span>
+        </CSSTranstionGroup>
         <span>lbs</span>
         <span>{fish.name}</span>
         <span className="price">{helpers.formatPrice(count * fish.price)}</span>
@@ -205,13 +208,19 @@ const Order = React.createClass({
     return (
       <div className="order-wrap">
         <h2 className="order-title">Your Order</h2>
-        <ul className="order">
+        <CSSTranstionGroup
+          className="order"
+          component="ul"
+          transitionName="order"
+          transitionEnterTimeout={5000}
+          transitionLeaveTimeout={5000}
+        >
           {orderIds.map(this.renderOrder)}
           <li className="total">
             <strong>Total:</strong>
             {helpers.formatPrice(total)}
           </li>
-        </ul>
+        </CSSTranstionGroup>
       </div>
     );
   }
