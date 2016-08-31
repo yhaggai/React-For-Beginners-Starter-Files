@@ -41,11 +41,21 @@ const App = React.createClass({
     this.state.order[key] = this.state.order[key] + 1 || 1;
     this.setState({order: this.state.order });
   },
+  removeFromOrder: function(key) {
+    delete this.state.order[key];
+    this.setState({order: this.state.order })
+  },
   addFish: function(fish) {
     const timestamp = (new Date().getTime());
     this.state.fishes[`fish-${timestamp}`] = fish;
     // set the state
     this.setState({ fishes: this.state.fishes });
+  },
+  removeFish: function(key){
+    if (confirm("are you sure?")) {
+      this.state.fishes[key] = null;
+      this.setState({ fishes: this.state.fishes })
+    }
   },
   loadSamples: function() {
     this.setState({
@@ -64,9 +74,9 @@ const App = React.createClass({
             {Object.keys(this.state.fishes).map(this.renderFish)}
           </ul> 
         </div>
-        <Order fishes={this.state.fishes} order={this.state.order}/>
+        <Order fishes={this.state.fishes} order={this.state.order} removeFromOrder={this.removeFromOrder}/>
         <Inventory addFish={this.addFish} loadSamples={this.loadSamples} 
-        fishes={this.state.fishes}/>
+        fishes={this.state.fishes} removeFish={this.removeFish}/>
       </div>
       );
   }
@@ -167,6 +177,8 @@ const Order = React.createClass({
   renderOrder: function(key) {
     const fish = this.props.fishes[key];
     const count = this.props.order[key]
+    const removeButton = <button onClick={this.props.removeFromOrder.bind(null, key)}>
+      &times;</button>
     if (!fish) {
       return <li key={key}>Sorry, fish no longer available!</li>
     }
@@ -176,6 +188,7 @@ const Order = React.createClass({
         <span>lbs</span>
         <span>{fish.name}</span>
         <span className="price">{helpers.formatPrice(count * fish.price)}</span>
+        {removeButton}
       </li>)
   },
   render: function() {
@@ -220,6 +233,7 @@ const Inventory = React.createClass({
         </select>
         <textarea type="text" value={this.props.fishes[key].desc}></textarea>
         <input type="text" ref="image" value={this.props.fishes[key].image} />
+        <button onClick={this.props.removeFish.bind(null, key)}>Remove Fish</button>
       </div>
     );
   },
