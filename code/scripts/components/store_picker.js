@@ -3,23 +3,26 @@ import React from 'react';
 import {History} from 'react-router';
 import helpers from '../helpers';
 
-const StorePicker = React.createClass({
-  mixins: [History],
-  goToStore: function() {
+class StorePicker extends React.Component {
+ constructor() {
+    super();
+    this.goToStore = this.goToStore.bind(this);
+  }
+  goToStore() {
     event.preventDefault();
     // get the input
     // navigate to the new url
     // this is what we used to do
     // var storeId = $('input').val();
     // 'refs' is used on the input field - storeId
-    const storeId = this.refs.storeId.value;
-    // this is what we used to do
-    // window.location.hash = ....
-    // this will cause an error (without mixin)
-    this.history.pushState(null, `/store/${storeId}`)
-    
-  },
-  render: function() {
+    // const storeId = this.refs.storeId.value;
+    // // this is what we used to do
+    // // window.location.hash = ....
+    // // this will cause an error (without mixin)
+    // this.history.pushState(null, `/store/${storeId}`)
+  }
+
+  render() {
     // alternative way
     // return React.createElement('p', {className: 'testing'}, 'content');
     // alway return a single element (unlike jade)
@@ -33,7 +36,7 @@ const StorePicker = React.createClass({
       </form>
     );
   }
-});
+}
 
 export default StorePicker;
 
